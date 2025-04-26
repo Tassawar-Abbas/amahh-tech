@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { Card, CardContent } from "@/components/ui/card"
+import { useRef, useEffect } from "react"
+import { motion, useAnimation, useInView } from "framer-motion"
+import { Card } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Star } from "lucide-react"
 
@@ -47,17 +47,75 @@ const reviews = [
     rating: 5,
     text: "Their cybersecurity services have given us peace of mind. They identified vulnerabilities we weren't aware of and implemented robust protection measures.",
   },
+  {
+    id: 6,
+    name: "James Wilson",
+    company: "Creative Studios",
+    avatar: "/placeholder.svg?height=100&width=100",
+    rating: 5,
+    text: "The website redesign exceeded all our expectations. Our conversion rate has increased by 40% since launch, and customer feedback has been overwhelmingly positive.",
+  },
+  {
+    id: 7,
+    name: "Sophia Martinez",
+    company: "EduTech Innovations",
+    avatar: "/placeholder.svg?height=100&width=100",
+    rating: 4,
+    text: "Their team developed an e-learning platform that has transformed how we deliver training. The intuitive interface and robust features have received praise from all our users.",
+  },
 ]
 
+function ReviewCard({ review }) {
+  return (
+    <Card className="h-full min-w-[300px] max-w-[350px] border-none bg-white/10 p-6 backdrop-blur-md">
+      <div className="mb-6 flex items-center gap-4">
+        <Avatar className="h-14 w-14 border-2 border-purple-300">
+          <AvatarImage src={review.avatar || "/placeholder.svg"} alt={review.name} />
+          <AvatarFallback>{review.name.charAt(0)}</AvatarFallback>
+        </Avatar>
+        <div>
+          <h3 className="text-lg font-semibold text-white">{review.name}</h3>
+          <p className="text-purple-300">{review.company}</p>
+          <div className="mt-1 flex">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={`h-4 w-4 ${i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-400"}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+      <blockquote className="text-purple-100">"{review.text}"</blockquote>
+    </Card>
+  )
+}
+
 export default function Reviews() {
-  const [activeIndex, setActiveIndex] = useState(0)
+  const containerRef = useRef(null)
+  const isInView = useInView(containerRef, { once: false, amount: 0.2 })
+  const controls = useAnimation()
+
+  // Calculate the total width of all cards plus gap
+  const totalWidth = reviews.length * 380 // 350px card width + 30px gap
+  const viewportWidth = typeof window !== "undefined" ? window.innerWidth : 1200
+  const scrollDistance = totalWidth - viewportWidth + 100 // Extra padding
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((current) => (current + 1) % reviews.length)
-    }, 5000)
-    return () => clearInterval(interval)
-  }, [])
+    if (isInView) {
+      controls.start({
+        x: -scrollDistance,
+        transition: {
+          duration: 30,
+          ease: "linear",
+          repeat: Number.POSITIVE_INFINITY,
+          repeatType: "loop",
+        },
+      })
+    } else {
+      controls.stop()
+    }
+  }, [isInView, controls, scrollDistance])
 
   return (
     <section id="reviews" className="bg-gradient-to-r from-purple-900 to-indigo-900 py-20 text-white">
@@ -75,55 +133,26 @@ export default function Reviews() {
           </p>
         </motion.div>
 
-        <div className="mx-auto max-w-4xl">
-          <motion.div
-            key={activeIndex}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Card className="bg-white/10 backdrop-blur-lg">
-              <CardContent className="p-8">
-                <div className="mb-6 flex items-center gap-4">
-                  <Avatar className="h-16 w-16 border-2 border-purple-300">
-                    <AvatarImage
-                      src={reviews[activeIndex].avatar || "/placeholder.svg"}
-                      alt={reviews[activeIndex].name}
-                    />
-                    <AvatarFallback>{reviews[activeIndex].name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h3 className="text-xl font-semibold">{reviews[activeIndex].name}</h3>
-                    <p className="text-purple-300">{reviews[activeIndex].company}</p>
-                    <div className="mt-1 flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-4 w-4 ${
-                            i < reviews[activeIndex].rating ? "fill-yellow-400 text-yellow-400" : "text-gray-400"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <blockquote className="text-lg italic text-purple-100">"{reviews[activeIndex].text}"</blockquote>
-              </CardContent>
-            </Card>
-          </motion.div>
+        <div className="relative overflow-hidden">
+          {/* Gradient fade effect on edges */}
+          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-32 bg-gradient-to-r from-purple-900 to-transparent" />
+          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-32 bg-gradient-to-l from-indigo-900 to-transparent" />
 
-          <div className="mt-8 flex justify-center gap-2">
-            {reviews.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveIndex(index)}
-                className={`h-3 w-3 rounded-full ${
-                  index === activeIndex ? "bg-white" : "bg-white/30"
-                } transition-all duration-300`}
-                aria-label={`Go to review ${index + 1}`}
-              />
-            ))}
+          <div ref={containerRef} className="overflow-visible py-8">
+            <motion.div className="flex gap-8" animate={controls} initial={{ x: 0 }}>
+              {/* Duplicate reviews for infinite scroll effect */}
+              {[...reviews, ...reviews].map((review, index) => (
+                <motion.div
+                  key={`${review.id}-${index}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  className="flex-shrink-0"
+                >
+                  <ReviewCard review={review} />
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </div>

@@ -98,29 +98,6 @@ export default function Hero() {
           </div>
         </motion.div>
       </div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <div
-          className="flex cursor-pointer flex-col items-center"
-          onClick={() => {
-            document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })
-          }}
-        >
-          <p className="mb-2 text-sm text-zinc-400">Scroll to explore</p>
-          <div className="h-8 w-5 rounded-full border-2 border-zinc-400 p-1">
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
-              className="h-1 w-1 rounded-full bg-zinc-400"
-            />
-          </div>
-        </div>
-      </motion.div>
     </section>
   )
 }
