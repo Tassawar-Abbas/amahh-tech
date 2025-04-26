@@ -1,25 +1,25 @@
 "use client"
+
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
-import Image from "next/image"
 
-// Technology icons that will animate
+// Simplified tech icons
 const techIcons = [
-  { name: "AI", icon: "/placeholder.svg?height=80&width=80", delay: 0 },
-  { name: "ML", icon: "/placeholder.svg?height=80&width=80", delay: 0.2 },
-  { name: "Data", icon: "/placeholder.svg?height=80&width=80", delay: 0.4 },
-  { name: "Cloud", icon: "/placeholder.svg?height=80&width=80", delay: 0.6 },
-  { name: "IoT", icon: "/placeholder.svg?height=80&width=80", delay: 0.8 },
-  { name: "AR", icon: "/placeholder.svg?height=80&width=80", delay: 1 },
-  { name: "VR", icon: "/placeholder.svg?height=80&width=80", delay: 1.2 },
-  { name: "Blockchain", icon: "/placeholder.svg?height=80&width=80", delay: 1.4 },
+  { name: "AI", delay: 0 },
+  { name: "ML", delay: 0.2 },
+  { name: "Data", delay: 0.4 },
+  { name: "Cloud", delay: 0.6 },
+  { name: "IoT", delay: 0.8 },
+  { name: "AR", delay: 1 },
+  { name: "VR", delay: 1.2 },
+  { name: "Blockchain", delay: 1.4 },
 ]
 
 export default function Hero() {
   return (
     <section className="relative h-screen w-full overflow-hidden bg-gradient-to-b from-black to-zinc-900 text-white">
-      {/* Animated tech background */}
+      {/* Simplified animated tech background */}
       <div className="absolute inset-0 z-0">
         <div className="relative h-full w-full">
           {techIcons.map((tech, index) => (
@@ -27,109 +27,47 @@ export default function Hero() {
               key={index}
               className="absolute"
               initial={{
-                x: Math.random() * 100 - 50 + "%",
-                y: Math.random() * 100 - 50 + "%",
+                x: `${Math.random() * 80 + 10}%`,
+                y: `${Math.random() * 80 + 10}%`,
                 opacity: 0,
-                scale: 0.5,
               }}
               animate={{
-                x: [Math.random() * 100 - 50 + "%", Math.random() * 100 - 50 + "%", Math.random() * 100 - 50 + "%"],
-                y: [Math.random() * 100 - 50 + "%", Math.random() * 100 - 50 + "%", Math.random() * 100 - 50 + "%"],
-                opacity: [0, 1, 0.8, 1, 0],
-                scale: [0.5, 1.2, 1, 1.5, 0.5],
+                opacity: [0, 0.7, 0],
               }}
               transition={{
-                duration: 20,
+                duration: 5,
                 repeat: Number.POSITIVE_INFINITY,
-                repeatType: "reverse",
-                delay: tech.delay * 3,
-                ease: "easeInOut",
+                repeatType: "loop",
+                delay: tech.delay * 2,
               }}
             >
               <div className="flex flex-col items-center">
                 <div className="rounded-full bg-purple-500/20 p-4 backdrop-blur-sm">
-                  <Image
-                    src={tech.icon || "/placeholder.svg"}
-                    alt={tech.name}
-                    width={80}
-                    height={80}
-                    className="h-12 w-12 opacity-80"
-                  />
+                  <div className="h-12 w-12 rounded-full bg-purple-500/50" />
                 </div>
-                <motion.span
-                  className="mt-2 rounded-full bg-purple-900/50 px-3 py-1 text-sm font-bold backdrop-blur-sm"
-                  animate={{
-                    boxShadow: [
-                      "0 0 0px rgba(139, 92, 246, 0.5)",
-                      "0 0 20px rgba(139, 92, 246, 0.8)",
-                      "0 0 0px rgba(139, 92, 246, 0.5)",
-                    ],
-                  }}
-                  transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-                >
+                <span className="mt-2 rounded-full bg-purple-900/50 px-3 py-1 text-sm font-bold backdrop-blur-sm">
                   {tech.name}
-                </motion.span>
+                </span>
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* AI network lines */}
-        <svg className="absolute inset-0 h-full w-full opacity-20">
-          <motion.path
-            d="M0,100 Q250,50 500,100 T1000,100"
-            fill="none"
-            stroke="url(#gradient1)"
-            strokeWidth="2"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, repeatType: "loop" }}
-          />
-          <motion.path
-            d="M0,200 Q250,150 500,200 T1000,200"
-            fill="none"
-            stroke="url(#gradient1)"
-            strokeWidth="2"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 7, repeat: Number.POSITIVE_INFINITY, repeatType: "loop", delay: 0.5 }}
-          />
-          <motion.path
-            d="M0,300 Q250,250 500,300 T1000,300"
-            fill="none"
-            stroke="url(#gradient1)"
-            strokeWidth="2"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 6, repeat: Number.POSITIVE_INFINITY, repeatType: "loop", delay: 1 }}
-          />
-          <defs>
-            <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#8b5cf6" />
-              <stop offset="100%" stopColor="#ec4899" />
-            </linearGradient>
-          </defs>
-        </svg>
-
-        {/* Animated particles */}
-        {Array.from({ length: 50 }).map((_, index) => (
+        {/* Simplified particles */}
+        {Array.from({ length: 20 }).map((_, index) => (
           <motion.div
             key={`particle-${index}`}
             className="absolute h-2 w-2 rounded-full bg-purple-500"
             initial={{
-              x: Math.random() * 100 + "%",
-              y: Math.random() * 100 + "%",
+              x: `${Math.random() * 100}%`,
+              y: `${Math.random() * 100}%`,
               opacity: Math.random() * 0.5 + 0.3,
-              scale: Math.random() * 0.5 + 0.5,
             }}
             animate={{
-              x: Math.random() * 100 + "%",
-              y: Math.random() * 100 + "%",
               opacity: [0.3, 0.8, 0.3],
-              scale: [0.5, 1, 0.5],
             }}
             transition={{
-              duration: Math.random() * 10 + 10,
+              duration: 3,
               repeat: Number.POSITIVE_INFINITY,
               repeatType: "reverse",
             }}

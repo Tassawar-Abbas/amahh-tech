@@ -2,8 +2,6 @@
 
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
-import { Canvas } from "@react-three/fiber"
-import { OrbitControls, Text3D, Float, Environment } from "@react-three/drei"
 
 const technologies = [
   { name: "React", category: "Frontend" },
@@ -20,43 +18,18 @@ const technologies = [
   { name: "Kubernetes", category: "DevOps" },
 ]
 
-function TechCloud() {
-  return (
-    <Canvas camera={{ position: [0, 0, 20], fov: 50 }}>
-      <ambientLight intensity={0.5} />
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-      <Environment preset="city" />
-      <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
-      {technologies.map((tech, i) => (
-        <Float key={i} speed={1} rotationIntensity={1} floatIntensity={2}>
-          <Text3D
-            font="/fonts/Inter_Bold.json"
-            position={[(Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15]}
-            size={1.5}
-            height={0.2}
-            curveSegments={12}
-          >
-            {tech.name}
-            <meshStandardMaterial color={getColorByCategory(tech.category)} />
-          </Text3D>
-        </Float>
-      ))}
-    </Canvas>
-  )
-}
-
 function getColorByCategory(category) {
   const colors = {
-    Frontend: "#8b5cf6", // Purple
-    Backend: "#3b82f6", // Blue
-    Language: "#ec4899", // Pink
-    Database: "#10b981", // Green
-    Cloud: "#f59e0b", // Amber
-    DevOps: "#ef4444", // Red
-    API: "#6366f1", // Indigo
-    AI: "#8b5cf6", // Purple
+    Frontend: "bg-purple-500",
+    Backend: "bg-blue-500",
+    Language: "bg-pink-500",
+    Database: "bg-emerald-500",
+    Cloud: "bg-amber-500",
+    DevOps: "bg-red-500",
+    API: "bg-indigo-500",
+    AI: "bg-violet-500",
   }
-  return colors[category] || "#6b7280" // Default gray
+  return colors[category] || "bg-gray-500"
 }
 
 export default function Technologies() {
@@ -79,8 +52,24 @@ export default function Technologies() {
           </p>
         </motion.div>
 
-        <div ref={ref} className="h-[600px] w-full">
-          {isInView && <TechCloud />}
+        <div ref={ref} className="mx-auto max-w-6xl">
+          {isInView && (
+            <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
+              {technologies.map((tech, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-md dark:bg-zinc-800"
+                >
+                  <div className={`h-3 w-3 rounded-full ${getColorByCategory(tech.category)}`}></div>
+                  <span className="font-medium">{tech.name}</span>
+                  <span className="ml-auto text-xs text-zinc-500">{tech.category}</span>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
 
         <motion.div
