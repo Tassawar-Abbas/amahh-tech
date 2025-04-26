@@ -8,12 +8,10 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Code, Menu } from "lucide-react"
 
 const navItems = [
-  { name: "Home", href: "#" },
-  { name: "Services", href: "#services" },
-  { name: "Projects", href: "#projects" },
-  { name: "Reviews", href: "#reviews" },
-  { name: "Technologies", href: "#technologies" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: "/" },
+  { name: "Services", href: "/services" },
+  { name: "Projects", href: "/projects" },
+  { name: "Contact", href: "/contact" },
 ]
 
 export default function Navbar() {
