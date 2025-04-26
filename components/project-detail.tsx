@@ -15,7 +15,7 @@ interface ProjectDetailProps {
 }
 
 export default function ProjectDetail({ project }: ProjectDetailProps) {
-  const [activeTab, setActiveTab] = useState("overview")
+  // const [activeTab, setActiveTab] = useState("overview")
   const relatedProjects = getRelatedProjects(project.id, project.category, 3)
 
   return (
@@ -66,7 +66,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
               />
             </div>
 
-            <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="mb-8">
+            {/* <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="mb-8">
               <TabsList className="grid w-full grid-cols-3 bg-white/10">
                 <TabsTrigger value="overview" className="data-[state=active]:bg-white/20">
                   Overview
@@ -77,57 +77,11 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
                 <TabsTrigger value="gallery" className="data-[state=active]:bg-white/20">
                   Gallery
                 </TabsTrigger>
-              </TabsList>
-              <TabsContent value="overview" className="mt-6 text-zinc-300">
-                <p className="mb-6 text-lg">{project.longDescription}</p>
-                <h3 className="mb-4 text-2xl font-bold text-white">Results</h3>
-                <p className="mb-6">{project.results}</p>
-                {project.testimonial && (
-                  <Card className="border-none bg-white/5 backdrop-blur-sm">
-                    <CardContent className="p-6">
-                      <blockquote className="mb-4 text-lg italic text-zinc-300">
-                        "{project.testimonial.quote}"
-                      </blockquote>
-                      <div className="flex items-center">
-                        <div className="h-10 w-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold">
-                          {project.testimonial.author.charAt(0)}
-                        </div>
-                        <div className="ml-4">
-                          <p className="font-medium text-white">{project.testimonial.author}</p>
-                          <p className="text-sm text-zinc-400">
-                            {project.testimonial.role}, {project.testimonial.company}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </TabsContent>
-              <TabsContent value="challenges" className="mt-6 space-y-8 text-zinc-300">
-                <div>
-                  <h3 className="mb-4 text-2xl font-bold text-white">Challenges</h3>
-                  <p>{project.challenges}</p>
-                </div>
-                <div>
-                  <h3 className="mb-4 text-2xl font-bold text-white">Solutions</h3>
-                  <p>{project.solutions}</p>
-                </div>
-              </TabsContent>
-              <TabsContent value="gallery" className="mt-6">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {project.gallery.map((image, index) => (
-                    <div key={index} className="relative h-[200px] w-full overflow-hidden rounded-lg">
-                      <Image
-                        src={image || "/placeholder.svg"}
-                        alt={`${project.title} gallery image ${index + 1}`}
-                        fill
-                        className="object-cover transition-transform duration-300 hover:scale-105"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </TabsContent>
-            </Tabs>
+              </TabsList> 
+             
+              
+             
+            </Tabs>*/}
           </motion.div>
 
           <motion.div
@@ -142,6 +96,10 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
                   <div>
                     <p className="text-sm text-zinc-400">Category</p>
                     <p className="text-white">{project.category}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-zinc-400">Description</p>
+                    <p className="text-white">{project.description}</p>
                   </div>
                   <div>
                     <p className="text-sm text-zinc-400">Technologies</p>
@@ -162,7 +120,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
                         <ExternalLink className="mr-2 h-4 w-4" /> Live Demo
                       </a>
                     </Button>
-                    <Button
+                    {/* <Button
                       variant="outline"
                       className="flex-1 border-purple-500 text-white hover:bg-purple-500/20"
                       asChild
@@ -170,7 +128,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
                       <a href={project.github} target="_blank" rel="noopener noreferrer">
                         <Github className="mr-2 h-4 w-4" /> Code
                       </a>
-                    </Button>
+                    </Button> */}
                   </div>
                 </div>
               </CardContent>

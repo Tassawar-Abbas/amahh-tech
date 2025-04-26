@@ -13,104 +13,111 @@ import { projects as allProjects } from "@/data/projects"
 
 const categories = ["All", "Web", "Mobile", "Enterprise", "AI"]
 
-// Custom hook for tilt effect
-function useTilt(active) {
-  const ref = useRef(null)
+function useTilt(enabled: boolean) {
+  const ref = useRef<HTMLDivElement>(null)
 
-  const handleMouseMove = (e) => {
-    if (!ref.current || !active) return
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!enabled || !ref.current) return
 
     const card = ref.current
     const rect = card.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
-    const centerX = rect.width / 2
-    const centerY = rect.height / 2
-    const rotateX = (y - centerY) / 25
-    const rotateY = (centerX - x) / 25
+    const rotateX = (y - rect.height / 2) / 20
+    const rotateY = (rect.width / 2 - x) / 20
 
     card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`
   }
 
   const handleMouseLeave = () => {
-    if (!ref.current || !active) return
-    ref.current.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`
+    if (ref.current) {
+      ref.current.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`
+    }
   }
 
-  return { ref, handleMouseMove, handleMouseLeave }
+  useEffect(() => {
+    const card = ref.current
+    if (!enabled || !card) return
+
+    card.addEventListener("mousemove", handleMouseMove)
+    card.addEventListener("mouseleave", handleMouseLeave)
+
+    return () => {
+      card.removeEventListener("mousemove", handleMouseMove)
+      card.removeEventListener("mouseleave", handleMouseLeave)
+    }
+  }, [enabled])
+
+  return { ref }
 }
 
-function ProjectCard({ project, index, inView }) {
+function ProjectCard({ project, index, inView }: { project: any, index: number, inView: boolean }) {
   const isMobile = useMobile()
-  const { ref, handleMouseMove, handleMouseLeave } = useTilt(!isMobile)
-  const [isVisible, setIsVisible] = useState(false)
+  const { ref } = useTilt(!isMobile)
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     if (inView) {
-      const timer = setTimeout(() => {
-        setIsVisible(true)
-      }, index * 300) // Stagger the appearance by 300ms per card
+      const timer = setTimeout(() => setVisible(true), index * 250)
       return () => clearTimeout(timer)
     }
-    return () => {}
   }, [inView, index])
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
-      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.7, ease: "easeOut" }}
+      animate={visible ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, ease: "easeOut" }}
       className="group"
     >
       <Card
         ref={ref}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        className="relative h-full overflow-hidden border-none bg-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/10"
+        className="relative h-full overflow-hidden border-none bg-white/5 backdrop-blur-md transition-all duration-300 hover:bg-white/10"
       >
-        <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="absolute -right-24 -top-24 h-48 w-48 rounded-full bg-gradient-to-br from-purple-400/20 to-pink-400/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
         <div className="relative h-48 w-full overflow-hidden">
-          <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <Image
             src={project.image || "/placeholder.svg"}
             alt={project.title}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-110"
           />
-          <div className="absolute bottom-0 left-0 z-20 flex w-full justify-between p-4 opacity-0 transition-all duration-300 group-hover:bottom-4 group-hover:opacity-100">
-            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full bg-white/20 backdrop-blur-sm" asChild>
-              <a href={project.github} target="_blank" rel="noopener noreferrer">
-                <Github className="h-4 w-4 text-white" />
-                <span className="sr-only">GitHub</span>
-              </a>
-            </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full bg-white/20 backdrop-blur-sm" asChild>
-              <a href={project.link} target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="h-4 w-4 text-white" />
-                <span className="sr-only">Visit Project</span>
-              </a>
-            </Button>
-          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           {project.featured && (
-            <div className="absolute left-0 top-0 z-20 m-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 px-3 py-1 text-xs font-medium text-white">
+            <div className="absolute top-4 left-4 z-10 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 px-3 py-1 text-xs font-semibold text-white">
               Featured
             </div>
           )}
+          <div className="absolute bottom-4 left-4 right-4 flex justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            {project.github && (
+              <Button variant="ghost" size="icon" className="h-8 w-8 bg-white/20 backdrop-blur-md" asChild>
+                <a href={project.github} target="_blank" rel="noopener noreferrer">
+                  <Github className="h-4 w-4 text-white" />
+                </a>
+              </Button>
+            )}
+            {project.link && (
+              <Button variant="ghost" size="icon" className="h-8 w-8 bg-white/20 backdrop-blur-md" asChild>
+                <a href={project.link} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="h-4 w-4 text-white" />
+                </a>
+              </Button>
+            )}
+          </div>
         </div>
 
         <div className="p-6">
-          <h3 className="mb-2 text-xl font-semibold text-white group-hover:text-purple-400">{project.title}</h3>
-          <p className="mb-4 text-zinc-300">{project.description}</p>
+          <h3 className="mb-2 text-xl font-bold text-white group-hover:text-purple-400 transition-colors duration-300">
+            {project.title}
+          </h3>
+          <p className="mb-4 text-sm text-zinc-300">{project.description}</p>
           <div className="flex items-center justify-between">
-            <span className="rounded-full bg-purple-900/30 px-3 py-1 text-sm text-purple-300">{project.category}</span>
+            <span className="rounded-full bg-purple-900/40 px-3 py-1 text-xs text-purple-300">{project.category}</span>
             <Link href={`/projects/${project.id}`}>
-              <motion.div
-                whileHover={{ x: 5 }}
-                className="flex cursor-pointer items-center text-sm font-medium text-purple-400"
-              >
+              <motion.div whileHover={{ x: 5 }} className="flex items-center text-sm font-medium text-purple-400">
                 View Details
-                <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}>
+                <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
                   <ArrowRight className="ml-1 h-4 w-4" />
                 </motion.div>
               </motion.div>
@@ -127,7 +134,6 @@ export default function Projects() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, amount: 0.1 })
 
-  // Limit to 6 projects for the homepage
   const displayedProjects = allProjects.slice(0, 6)
 
   const filteredProjects =
@@ -137,12 +143,12 @@ export default function Projects() {
 
   return (
     <section id="projects" className="relative overflow-hidden py-20">
-      {/* Background decoration */}
-      <div className="absolute left-0 top-0 -z-10 h-full w-full overflow-hidden">
-        <div className="absolute -left-32 -top-32 h-64 w-64 rounded-full bg-purple-500/10" />
-        <div className="absolute -right-32 -top-32 h-64 w-64 rounded-full bg-pink-500/10" />
-        <div className="absolute -bottom-32 -left-32 h-64 w-64 rounded-full bg-blue-500/10" />
-        <div className="absolute -bottom-32 -right-32 h-64 w-64 rounded-full bg-emerald-500/10" />
+      {/* Background Gradient Circles */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute -left-40 -top-40 h-80 w-80 rounded-full bg-purple-500/10" />
+        <div className="absolute -right-40 -top-40 h-80 w-80 rounded-full bg-pink-500/10" />
+        <div className="absolute -left-40 -bottom-40 h-80 w-80 rounded-full bg-blue-500/10" />
+        <div className="absolute -right-40 -bottom-40 h-80 w-80 rounded-full bg-emerald-500/10" />
       </div>
 
       <div className="container mx-auto px-4">
@@ -150,19 +156,22 @@ export default function Projects() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6 }}
           className="mb-16 text-center"
         >
-          <h2 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">Our Projects</h2>
-          <p className="mx-auto max-w-2xl text-lg text-zinc-300">
-            Explore our portfolio of successful projects that showcase our expertise and innovation
+          <h2 className="mb-4 text-4xl font-bold tracking-tight text-white md:text-5xl">
+            Our Creations at Amāhh
+          </h2>
+          <p className="mx-auto max-w-2xl text-lg text-zinc-400">
+            Dive into our portfolio — blending imagination, innovation, and impact.
           </p>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
           className="mb-12 flex justify-center"
         >
           <Tabs defaultValue="All" className="w-full max-w-md">
@@ -179,7 +188,7 @@ export default function Projects() {
                     <motion.div
                       layoutId="activeTab"
                       className="absolute bottom-0 left-0 h-0.5 w-full bg-purple-500"
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                   )}
                 </TabsTrigger>
@@ -198,7 +207,7 @@ export default function Projects() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
           className="mt-16 text-center"
         >
           <Link href="/projects">
@@ -206,7 +215,7 @@ export default function Projects() {
               size="lg"
               className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
             >
-              View All Projects
+              View Full Portfolio
             </Button>
           </Link>
         </motion.div>
