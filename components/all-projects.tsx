@@ -1,15 +1,16 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
-import { motion, useInView } from "framer-motion"
+import { useState, useRef } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ExternalLink, Github, ArrowRight } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { ExternalLink, Github, ArrowRight, Search } from "lucide-react"
 import { useMobile } from "@/hooks/use-mobile"
-import { projects as allProjects } from "@/data/projects"
+import { projects } from "@/data/projects"
 
 const categories = ["All", "Web", "Mobile", "Enterprise", "AI"]
 
@@ -40,26 +41,16 @@ function useTilt(active) {
   return { ref, handleMouseMove, handleMouseLeave }
 }
 
-function ProjectCard({ project, index, inView }) {
+function ProjectCard({ project, index }) {
   const isMobile = useMobile()
   const { ref, handleMouseMove, handleMouseLeave } = useTilt(!isMobile)
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    if (inView) {
-      const timer = setTimeout(() => {
-        setIsVisible(true)
-      }, index * 300) // Stagger the appearance by 300ms per card
-      return () => clearTimeout(timer)
-    }
-    return () => {}
-  }, [inView, index])
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
-      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.7, ease: "easeOut" }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 50 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
       className="group"
     >
       <Card
@@ -102,6 +93,18 @@ function ProjectCard({ project, index, inView }) {
         <div className="p-6">
           <h3 className="mb-2 text-xl font-semibold text-white group-hover:text-purple-400">{project.title}</h3>
           <p className="mb-4 text-zinc-300">{project.description}</p>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {project.technologies.slice(0, 3).map((tech, i) => (
+              <span key={i} className="text-xs bg-purple-900/30 text-purple-300 px-2 py-1 rounded-full">
+                {tech}
+              </span>
+            ))}
+            {project.technologies.length > 3 && (
+              <span className="text-xs bg-purple-900/30 text-purple-300 px-2 py-1 rounded-full">
+                +{project.technologies.length - 3}
+              </span>
+            )}
+          </div>
           <div className="flex items-center justify-between">
             <span className="rounded-full bg-purple-900/30 px-3 py-1 text-sm text-purple-300">{project.category}</span>
             <Link href={`/projects/${project.id}`}>
@@ -122,21 +125,22 @@ function ProjectCard({ project, index, inView }) {
   )
 }
 
-export default function Projects() {
+export default function AllProjects() {
   const [activeCategory, setActiveCategory] = useState("All")
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, amount: 0.1 })
+  const [searchQuery, setSearchQuery] = useState("")
 
-  // Limit to 6 projects for the homepage
-  const displayedProjects = allProjects.slice(0, 6)
+  const filteredProjects = projects.filter((project) => {
+    const matchesCategory = activeCategory === "All" || project.category === activeCategory
+    const matchesSearch =
+      project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.technologies.some((tech) => tech.toLowerCase().includes(searchQuery.toLowerCase()))
 
-  const filteredProjects =
-    activeCategory === "All"
-      ? displayedProjects
-      : displayedProjects.filter((project) => project.category === activeCategory)
+    return matchesCategory && matchesSearch
+  })
 
   return (
-    <section id="projects" className="relative overflow-hidden py-20">
+    <section className="relative overflow-hidden py-20">
       {/* Background decoration */}
       <div className="absolute left-0 top-0 -z-10 h-full w-full overflow-hidden">
         <div className="absolute -left-32 -top-32 h-64 w-64 rounded-full bg-purple-500/10" />
@@ -148,23 +152,17 @@ export default function Projects() {
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="mb-16 text-center"
         >
-          <h2 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">Our Projects</h2>
+          <h1 className="mb-4 text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">Our Projects</h1>
           <p className="mx-auto max-w-2xl text-lg text-zinc-300">
-            Explore our portfolio of successful projects that showcase our expertise and innovation
+            Explore our complete portfolio of successful projects that showcase our expertise and innovation
           </p>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-12 flex justify-center"
-        >
+        <div className="mb-8 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <Tabs defaultValue="All" className="w-full max-w-md">
             <TabsList className="grid w-full grid-cols-5 bg-white/10">
               {categories.map((category) => (
@@ -186,30 +184,50 @@ export default function Projects() {
               ))}
             </TabsList>
           </Tabs>
-        </motion.div>
 
-        <div ref={ref} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((project, index) => (
-            <ProjectCard key={`${activeCategory}-${index}`} project={project} index={index} inView={inView} />
-          ))}
+          <div className="relative w-full max-w-sm">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+            <Input
+              type="text"
+              placeholder="Search projects..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 border-zinc-700 bg-white/5 text-white placeholder:text-zinc-500"
+            />
+          </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-16 text-center"
-        >
-          <Link href="/projects">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-            >
-              View All Projects
-            </Button>
-          </Link>
-        </motion.div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeCategory + searchQuery}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {filteredProjects.length > 0 ? (
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {filteredProjects.map((project, index) => (
+                  <ProjectCard key={`${activeCategory}-${project.id}-${index}`} project={project} index={index} />
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-20">
+                <p className="text-xl text-zinc-400">No projects found matching your criteria.</p>
+                <Button
+                  variant="link"
+                  className="mt-4 text-purple-400"
+                  onClick={() => {
+                    setSearchQuery("")
+                    setActiveCategory("All")
+                  }}
+                >
+                  Clear filters
+                </Button>
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   )
