@@ -12,9 +12,9 @@ const techIcons = [
   { name: "ML", delay: 0.2 },
   { name: "Data", delay: 0.4 },
   { name: "Cloud", delay: 0.6 },
-  { name: "IoT", delay: 0.8 },
-  { name: "AR", delay: 1 },
-  { name: "VR", delay: 1.2 },
+  { name: "Learning", delay: 0.8 },
+  { name: "Chat", delay: 1 },
+  { name: "Ecom", delay: 1.2 },
   { name: "Blockchain", delay: 1.4 },
 ]
 
