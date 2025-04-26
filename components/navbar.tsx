@@ -80,9 +80,9 @@ export default function Navbar() {
                     {item.name}
                   </Link>
                 ))}
-                <Button className="mt-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+                {/* <Button className="mt-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                   Get Started
-                </Button>
+                </Button> */}
               </nav>
             </div>
           </SheetContent>
