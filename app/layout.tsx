@@ -11,7 +11,10 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Amahh - Innovative Software Solutions",
   description: "We build innovative software solutions that drive business growth and enhance user experiences",
-    generator: 'v0.dev'
+    generator: 'v0.dev',
+    icons: {
+      icon: '/amahh.png', 
+    },
 }
 
 export default function RootLayout({
