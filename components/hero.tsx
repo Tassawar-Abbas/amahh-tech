@@ -18,8 +18,8 @@ const techIcons = [
 
 export default function Hero() {
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-gradient-to-b from-black to-zinc-900 text-white">
-      {/* Simplified animated tech background */}
+    <section className="relative h-screen w-full overflow-hidden">
+      {/* Animated tech background */}
       <div className="absolute inset-0 z-0">
         <div className="relative h-full w-full">
           {techIcons.map((tech, index) => (
@@ -82,17 +82,23 @@ export default function Hero() {
           transition={{ duration: 0.8 }}
           className="max-w-4xl"
         >
-          <h1 className="mb-6 text-5xl font-bold leading-tight tracking-tighter md:text-6xl lg:text-7xl">
-            Transforming Ideas Into <span className="text-purple-500">Digital Reality</span>
+          <h1 className="mb-6 text-5xl font-bold leading-tight tracking-tighter text-white md:text-6xl lg:text-7xl">
+            Transforming Ideas Into{" "}
+            <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Digital Reality
+            </span>
           </h1>
           <p className="mb-8 text-xl text-zinc-300 md:text-2xl">
             We build innovative software solutions that drive business growth and enhance user experiences
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+            >
               Our Services <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-            <Button variant="outline" size="lg">
+            <Button variant="outline" size="lg" className="border-purple-500 text-white hover:bg-purple-500/20">
               View Projects
             </Button>
           </div>

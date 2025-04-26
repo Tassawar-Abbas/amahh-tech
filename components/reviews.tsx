@@ -67,9 +67,9 @@ const reviews = [
 
 function ReviewCard({ review }) {
   return (
-    <Card className="h-full min-w-[300px] max-w-[350px] border-none bg-white/10 p-6 backdrop-blur-md">
+    <Card className="h-full min-w-[300px] max-w-[350px] border-none bg-white/5 p-6 backdrop-blur-md">
       <div className="mb-6 flex items-center gap-4">
-        <Avatar className="h-14 w-14 border-2 border-purple-300">
+        <Avatar className="h-14 w-14 border-2 border-purple-400">
           <AvatarImage src={review.avatar || "/placeholder.svg"} alt={review.name} />
           <AvatarFallback>{review.name.charAt(0)}</AvatarFallback>
         </Avatar>
@@ -80,13 +80,13 @@ function ReviewCard({ review }) {
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
-                className={`h-4 w-4 ${i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-400"}`}
+                className={`h-4 w-4 ${i < review.rating ? "fill-purple-400 text-purple-400" : "text-gray-600"}`}
               />
             ))}
           </div>
         </div>
       </div>
-      <blockquote className="text-purple-100">"{review.text}"</blockquote>
+      <blockquote className="text-zinc-300">"{review.text}"</blockquote>
     </Card>
   )
 }
@@ -118,7 +118,7 @@ export default function Reviews() {
   }, [isInView, controls, scrollDistance])
 
   return (
-    <section id="reviews" className="bg-gradient-to-r from-purple-900 to-indigo-900 py-20 text-white">
+    <section id="reviews" className="py-20">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -127,16 +127,16 @@ export default function Reviews() {
           transition={{ duration: 0.5 }}
           className="mb-16 text-center"
         >
-          <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">Client Reviews</h2>
-          <p className="mx-auto max-w-2xl text-lg text-purple-200">
+          <h2 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">Client Reviews</h2>
+          <p className="mx-auto max-w-2xl text-lg text-zinc-300">
             Don't just take our word for it. Here's what our clients have to say about working with us
           </p>
         </motion.div>
 
         <div className="relative overflow-hidden">
           {/* Gradient fade effect on edges */}
-          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-32 bg-gradient-to-r from-purple-900 to-transparent" />
-          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-32 bg-gradient-to-l from-indigo-900 to-transparent" />
+          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-32 bg-gradient-to-r from-[#1a103a] to-transparent" />
+          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-32 bg-gradient-to-l from-[#1a2045] to-transparent" />
 
           <div ref={containerRef} className="overflow-visible py-8">
             <motion.div className="flex gap-8" animate={controls} initial={{ x: 0 }}>

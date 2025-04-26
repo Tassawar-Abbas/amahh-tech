@@ -37,7 +37,7 @@ export default function Technologies() {
   const isInView = useInView(ref, { once: true })
 
   return (
-    <section id="technologies" className="bg-zinc-100 py-20 dark:bg-zinc-900">
+    <section id="technologies" className="py-20">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -46,8 +46,8 @@ export default function Technologies() {
           transition={{ duration: 0.5 }}
           className="mb-16 text-center"
         >
-          <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">Technologies</h2>
-          <p className="mx-auto max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
+          <h2 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">Technologies</h2>
+          <p className="mx-auto max-w-2xl text-lg text-zinc-300">
             We leverage cutting-edge technologies to build robust, scalable, and innovative solutions
           </p>
         </motion.div>
@@ -61,11 +61,11 @@ export default function Technologies() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
-                  className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-md dark:bg-zinc-800"
+                  className="flex items-center gap-3 rounded-lg bg-white/5 p-4 shadow-md backdrop-blur-sm"
                 >
                   <div className={`h-3 w-3 rounded-full ${getColorByCategory(tech.category)}`}></div>
-                  <span className="font-medium">{tech.name}</span>
-                  <span className="ml-auto text-xs text-zinc-500">{tech.category}</span>
+                  <span className="font-medium text-white">{tech.name}</span>
+                  <span className="ml-auto text-xs text-zinc-400">{tech.category}</span>
                 </motion.div>
               ))}
             </div>
@@ -79,7 +79,7 @@ export default function Technologies() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-16 text-center"
         >
-          <p className="mx-auto max-w-3xl text-lg text-zinc-600 dark:text-zinc-400">
+          <p className="mx-auto max-w-3xl text-lg text-zinc-300">
             Our team stays at the forefront of technological advancements, continuously learning and adopting new tools
             and frameworks to deliver the best solutions for our clients.
           </p>

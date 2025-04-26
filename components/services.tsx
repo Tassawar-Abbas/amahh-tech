@@ -64,7 +64,7 @@ const itemVariants = {
 
 export default function Services() {
   return (
-    <section id="services" className="bg-zinc-100 py-20 dark:bg-zinc-900">
+    <section id="services" className="py-20">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -73,8 +73,8 @@ export default function Services() {
           transition={{ duration: 0.5 }}
           className="mb-16 text-center"
         >
-          <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">Our Services</h2>
-          <p className="mx-auto max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
+          <h2 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">Our Services</h2>
+          <p className="mx-auto max-w-2xl text-lg text-zinc-300">
             We offer a comprehensive range of software development services to help your business thrive in the digital
             landscape
           </p>
@@ -92,12 +92,12 @@ export default function Services() {
               <motion.div
                 whileHover={{
                   scale: 1.05,
-                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1)",
                 }}
                 transition={{ type: "spring", stiffness: 300 }}
                 className="h-full overflow-hidden rounded-lg"
               >
-                <Card className="relative h-full border-none bg-white shadow-lg transition-all duration-300 dark:bg-zinc-800">
+                <Card className="relative h-full border-none bg-white/5 shadow-lg transition-all duration-300 backdrop-blur-sm">
                   <div
                     className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 transition-opacity duration-300 group-hover:opacity-10`}
                   />
@@ -115,13 +115,13 @@ export default function Services() {
                     >
                       {service.icon}
                     </motion.div>
-                    <CardTitle className="text-xl">{service.title}</CardTitle>
+                    <CardTitle className="text-xl text-white">{service.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription className="text-base">{service.description}</CardDescription>
+                    <CardDescription className="text-base text-zinc-300">{service.description}</CardDescription>
 
                     <motion.div
-                      className="mt-4 flex items-center text-sm font-medium text-purple-600 dark:text-purple-400"
+                      className="mt-4 flex items-center text-sm font-medium text-purple-400"
                       whileHover={{ x: 5 }}
                     >
                       Learn more

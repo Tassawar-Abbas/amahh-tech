@@ -20,8 +20,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+      <body className={`${inter.className} min-h-screen bg-gradient-to-br from-[#1a103a] to-[#1a2045]`}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
           <Navbar />
           {children}
         </ThemeProvider>

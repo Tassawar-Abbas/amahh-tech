@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useRef, useEffect } from "react"
+import { motion, useInView } from "framer-motion"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -95,23 +95,33 @@ function useTilt(active) {
   return { ref, handleMouseMove, handleMouseLeave }
 }
 
-function ProjectCard({ project, index }) {
+function ProjectCard({ project, index, inView }) {
   const isMobile = useMobile()
   const { ref, handleMouseMove, handleMouseLeave } = useTilt(!isMobile)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    if (inView) {
+      const timer = setTimeout(() => {
+        setIsVisible(true)
+      }, index * 300) // Stagger the appearance by 300ms per card
+      return () => clearTimeout(timer)
+    }
+    return () => {}
+  }, [inView, index])
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      initial={{ opacity: 0, y: 50 }}
+      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
       className="group"
     >
       <Card
         ref={ref}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className="relative h-full overflow-hidden border-none bg-white transition-all duration-300 dark:bg-zinc-800"
+        className="relative h-full overflow-hidden border-none bg-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/10"
       >
         <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
@@ -145,17 +155,13 @@ function ProjectCard({ project, index }) {
         </div>
 
         <div className="p-6">
-          <h3 className="mb-2 text-xl font-semibold group-hover:text-purple-600 dark:group-hover:text-purple-400">
-            {project.title}
-          </h3>
-          <p className="mb-4 text-zinc-600 dark:text-zinc-400">{project.description}</p>
+          <h3 className="mb-2 text-xl font-semibold text-white group-hover:text-purple-400">{project.title}</h3>
+          <p className="mb-4 text-zinc-300">{project.description}</p>
           <div className="flex items-center justify-between">
-            <span className="rounded-full bg-purple-100 px-3 py-1 text-sm text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
-              {project.category}
-            </span>
+            <span className="rounded-full bg-purple-900/30 px-3 py-1 text-sm text-purple-300">{project.category}</span>
             <motion.div
               whileHover={{ x: 5 }}
-              className="flex cursor-pointer items-center text-sm font-medium text-purple-600 dark:text-purple-400"
+              className="flex cursor-pointer items-center text-sm font-medium text-purple-400"
             >
               View Details
               <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}>
@@ -171,18 +177,20 @@ function ProjectCard({ project, index }) {
 
 export default function Projects() {
   const [activeCategory, setActiveCategory] = useState("All")
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, amount: 0.1 })
 
   const filteredProjects =
     activeCategory === "All" ? projects : projects.filter((project) => project.category === activeCategory)
 
   return (
-    <section id="projects" className="relative overflow-hidden bg-white py-20 dark:bg-zinc-950">
+    <section id="projects" className="relative overflow-hidden py-20">
       {/* Background decoration */}
       <div className="absolute left-0 top-0 -z-10 h-full w-full overflow-hidden">
-        <div className="absolute -left-32 -top-32 h-64 w-64 rounded-full bg-purple-500/5" />
-        <div className="absolute -right-32 -top-32 h-64 w-64 rounded-full bg-pink-500/5" />
-        <div className="absolute -bottom-32 -left-32 h-64 w-64 rounded-full bg-blue-500/5" />
-        <div className="absolute -bottom-32 -right-32 h-64 w-64 rounded-full bg-emerald-500/5" />
+        <div className="absolute -left-32 -top-32 h-64 w-64 rounded-full bg-purple-500/10" />
+        <div className="absolute -right-32 -top-32 h-64 w-64 rounded-full bg-pink-500/10" />
+        <div className="absolute -bottom-32 -left-32 h-64 w-64 rounded-full bg-blue-500/10" />
+        <div className="absolute -bottom-32 -right-32 h-64 w-64 rounded-full bg-emerald-500/10" />
       </div>
 
       <div className="container mx-auto px-4">
@@ -193,8 +201,8 @@ export default function Projects() {
           transition={{ duration: 0.5 }}
           className="mb-16 text-center"
         >
-          <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">Our Projects</h2>
-          <p className="mx-auto max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
+          <h2 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">Our Projects</h2>
+          <p className="mx-auto max-w-2xl text-lg text-zinc-300">
             Explore our portfolio of successful projects that showcase our expertise and innovation
           </p>
         </motion.div>
@@ -206,19 +214,19 @@ export default function Projects() {
           className="mb-12 flex justify-center"
         >
           <Tabs defaultValue="All" className="w-full max-w-md">
-            <TabsList className="grid w-full grid-cols-5">
+            <TabsList className="grid w-full grid-cols-5 bg-white/10">
               {categories.map((category) => (
                 <TabsTrigger
                   key={category}
                   value={category}
                   onClick={() => setActiveCategory(category)}
-                  className="relative overflow-hidden"
+                  className="relative overflow-hidden data-[state=active]:bg-white/20 data-[state=active]:text-white"
                 >
                   {category}
                   {activeCategory === category && (
                     <motion.div
                       layoutId="activeTab"
-                      className="absolute bottom-0 left-0 h-0.5 w-full bg-purple-600"
+                      className="absolute bottom-0 left-0 h-0.5 w-full bg-purple-500"
                       transition={{ type: "spring", stiffness: 500, damping: 30 }}
                     />
                   )}
@@ -228,21 +236,11 @@ export default function Projects() {
           </Tabs>
         </motion.div>
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeCategory}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {filteredProjects.map((project, index) => (
-                <ProjectCard key={`${activeCategory}-${index}`} project={project} index={index} />
-              ))}
-            </div>
-          </motion.div>
-        </AnimatePresence>
+        <div ref={ref} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {filteredProjects.map((project, index) => (
+            <ProjectCard key={`${activeCategory}-${index}`} project={project} index={index} inView={inView} />
+          ))}
+        </div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

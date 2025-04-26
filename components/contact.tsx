@@ -32,7 +32,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="bg-white py-20 dark:bg-zinc-950">
+    <section id="contact" className="py-20">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -41,8 +41,8 @@ export default function Contact() {
           transition={{ duration: 0.5 }}
           className="mb-16 text-center"
         >
-          <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">Contact Us</h2>
-          <p className="mx-auto max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
+          <h2 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">Contact Us</h2>
+          <p className="mx-auto max-w-2xl text-lg text-zinc-300">
             Have a project in mind? Get in touch with us to see how we can help bring your ideas to life
           </p>
         </motion.div>
@@ -54,16 +54,18 @@ export default function Contact() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <Card>
+            <Card className="border-none bg-white/5 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle>Get in Touch</CardTitle>
-                <CardDescription>Fill out the form and our team will get back to you within 24 hours</CardDescription>
+                <CardTitle className="text-white">Get in Touch</CardTitle>
+                <CardDescription className="text-zinc-300">
+                  Fill out the form and our team will get back to you within 24 hours
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
-                      <label htmlFor="name" className="text-sm font-medium">
+                      <label htmlFor="name" className="text-sm font-medium text-zinc-300">
                         Name
                       </label>
                       <Input
@@ -73,10 +75,11 @@ export default function Contact() {
                         value={formData.name}
                         onChange={handleChange}
                         required
+                        className="border-zinc-700 bg-white/5 text-white placeholder:text-zinc-500"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label htmlFor="email" className="text-sm font-medium">
+                      <label htmlFor="email" className="text-sm font-medium text-zinc-300">
                         Email
                       </label>
                       <Input
@@ -87,11 +90,12 @@ export default function Contact() {
                         value={formData.email}
                         onChange={handleChange}
                         required
+                        className="border-zinc-700 bg-white/5 text-white placeholder:text-zinc-500"
                       />
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="subject" className="text-sm font-medium">
+                    <label htmlFor="subject" className="text-sm font-medium text-zinc-300">
                       Subject
                     </label>
                     <Input
@@ -101,10 +105,11 @@ export default function Contact() {
                       value={formData.subject}
                       onChange={handleChange}
                       required
+                      className="border-zinc-700 bg-white/5 text-white placeholder:text-zinc-500"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="message" className="text-sm font-medium">
+                    <label htmlFor="message" className="text-sm font-medium text-zinc-300">
                       Message
                     </label>
                     <Textarea
@@ -115,9 +120,13 @@ export default function Contact() {
                       value={formData.message}
                       onChange={handleChange}
                       required
+                      className="border-zinc-700 bg-white/5 text-white placeholder:text-zinc-500"
                     />
                   </div>
-                  <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+                  <Button
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                  >
                     Send Message <Send className="ml-2 h-4 w-4" />
                   </Button>
                 </form>
@@ -133,30 +142,30 @@ export default function Contact() {
             className="flex flex-col justify-between"
           >
             <div className="mb-8">
-              <h3 className="mb-4 text-2xl font-bold">Contact Information</h3>
-              <p className="mb-6 text-zinc-600 dark:text-zinc-400">
+              <h3 className="mb-4 text-2xl font-bold text-white">Contact Information</h3>
+              <p className="mb-6 text-zinc-300">
                 We're here to help with any questions about our services or to discuss your project requirements.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start">
-                  <Mail className="mr-4 h-6 w-6 text-purple-600" />
+                  <Mail className="mr-4 h-6 w-6 text-purple-400" />
                   <div>
-                    <h4 className="font-medium">Email</h4>
-                    <p className="text-zinc-600 dark:text-zinc-400">contact@yourcompany.com</p>
+                    <h4 className="font-medium text-white">Email</h4>
+                    <p className="text-zinc-300">contact@yourcompany.com</p>
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <Phone className="mr-4 h-6 w-6 text-purple-600" />
+                  <Phone className="mr-4 h-6 w-6 text-purple-400" />
                   <div>
-                    <h4 className="font-medium">Phone</h4>
-                    <p className="text-zinc-600 dark:text-zinc-400">+1 (555) 123-4567</p>
+                    <h4 className="font-medium text-white">Phone</h4>
+                    <p className="text-zinc-300">+1 (555) 123-4567</p>
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <MapPin className="mr-4 h-6 w-6 text-purple-600" />
+                  <MapPin className="mr-4 h-6 w-6 text-purple-400" />
                   <div>
-                    <h4 className="font-medium">Office</h4>
-                    <p className="text-zinc-600 dark:text-zinc-400">
+                    <h4 className="font-medium text-white">Office</h4>
+                    <p className="text-zinc-300">
                       123 Tech Boulevard, Suite 456
                       <br />
                       San Francisco, CA 94107
@@ -166,13 +175,13 @@ export default function Contact() {
               </div>
             </div>
 
-            <Card className="bg-purple-600 text-white">
+            <Card className="border-none bg-gradient-to-r from-purple-600 to-pink-600 text-white">
               <CardContent className="p-6">
                 <h3 className="mb-2 text-xl font-bold">Ready to start your project?</h3>
                 <p className="mb-4">
                   Schedule a free consultation with our experts to discuss your requirements and get a quote.
                 </p>
-                <Button variant="outline" className="border-white text-white hover:bg-white hover:text-purple-600">
+                <Button variant="outline" className="border-white text-white hover:bg-white/20">
                   Book a Consultation
                 </Button>
               </CardContent>
