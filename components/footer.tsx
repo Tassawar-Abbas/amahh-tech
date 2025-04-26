@@ -31,7 +31,7 @@ export default function Footer() {
       </div>
 
       <div className="container mx-auto px-4">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
           {/* Company Info */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -48,30 +48,30 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               <motion.a
-                href="#"
+                href="https://github.com/Tassawar-Abbas"
                 whileHover={{ y: -3, color: "#8B5CF6" }}
                 className="text-zinc-400 transition-colors hover:text-white"
               >
                 <Github className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>
               </motion.a>
-              <motion.a
+              {/* <motion.a
                 href="#"
                 whileHover={{ y: -3, color: "#8B5CF6" }}
                 className="text-zinc-400 transition-colors hover:text-white"
               >
                 <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
-              </motion.a>
+              </motion.a> */}
               <motion.a
-                href="#"
+                href="https://www.linkedin.com/in/tassawar-abbas-565bb6191/"
                 whileHover={{ y: -3, color: "#8B5CF6" }}
                 className="text-zinc-400 transition-colors hover:text-white"
               >
                 <Linkedin className="h-5 w-5" />
                 <span className="sr-only">LinkedIn</span>
               </motion.a>
-              <motion.a
+              {/* <motion.a
                 href="#"
                 whileHover={{ y: -3, color: "#8B5CF6" }}
                 className="text-zinc-400 transition-colors hover:text-white"
@@ -86,7 +86,7 @@ export default function Footer() {
               >
                 <Youtube className="h-5 w-5" />
                 <span className="sr-only">YouTube</span>
-              </motion.a>
+              </motion.a> */}
             </div>
           </motion.div>
 
@@ -101,12 +101,12 @@ export default function Footer() {
             <ul className="space-y-3">
               {[
                 { name: "Home", href: "/" },
-                { name: "About Us", href: "#" },
-                { name: "Services", href: "#services" },
+                // { name: "About Us", href: "#" },
+                { name: "Services", href: "/services" },
                 { name: "Projects", href: "/projects" },
-                { name: "Blog", href: "#" },
-                { name: "Careers", href: "#" },
-                { name: "Contact", href: "#contact" },
+                // { name: "Blog", href: "#" },
+                // { name: "Careers", href: "#" },
+                { name: "Contact", href: "/contact" },
               ].map((link) => (
                 <li key={link.name}>
                   <Link
@@ -130,27 +130,28 @@ export default function Footer() {
           >
             <h3 className="mb-6 text-lg font-semibold text-white">Contact Us</h3>
             <ul className="space-y-4">
-              <li className="flex items-start">
+              {/* <li className="flex items-start">
                 <MapPin className="mr-3 h-5 w-5 text-purple-400" />
                 <span className="text-zinc-300">
                   123 Tech Boulevard, Suite 456
                   <br />
                   San Francisco, CA 94107
                 </span>
-              </li>
+              </li> */}
               <li className="flex items-center">
                 <Phone className="mr-3 h-5 w-5 text-purple-400" />
-                <span className="text-zinc-300">+1 (555) 123-4567</span>
+                <span className="text-zinc-300">+92 3249274607 | +92 3116676939</span>
               </li>
+              
               <li className="flex items-center">
                 <Mail className="mr-3 h-5 w-5 text-purple-400" />
-                <span className="text-zinc-300">contact@amahh.com</span>
+                <span className="text-zinc-300">amahh.tech@gmail.com</span>
               </li>
             </ul>
           </motion.div>
 
           {/* Newsletter */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -185,16 +186,16 @@ export default function Footer() {
                 .
               </p>
             </form>
-          </motion.div>
+          </motion.div> */}
         </div>
 
         {/* Bottom Bar */}
         <div className="mt-16 border-t border-white/10 py-8">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+          <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
             <p className="text-center text-sm text-zinc-400">
-              © {currentYear} Amahh. All rights reserved. Crafted with passion.
+              © 2024 Amahh. All rights reserved. Crafted with passion.
             </p>
-            <div className="flex space-x-6 text-sm text-zinc-400">
+            {/* <div className="flex space-x-6 text-sm text-zinc-400">
               <Link href="#" className="hover:text-purple-400">
                 Privacy Policy
               </Link>
@@ -204,7 +205,7 @@ export default function Footer() {
               <Link href="#" className="hover:text-purple-400">
                 Cookie Policy
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
