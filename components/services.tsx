@@ -1,8 +1,10 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useRef } from "react"
+import { motion, useInView } from "framer-motion"
 import { Code, LineChart, Smartphone, Globe, Database, Shield } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import AnimatedText from "./animated-text"
 
 const services = [
   {
@@ -63,6 +65,9 @@ const itemVariants = {
 }
 
 export default function Services() {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0.1 })
+
   return (
     <section id="services" className="py-20">
       <div className="container mx-auto px-4">
@@ -81,6 +86,7 @@ export default function Services() {
         </motion.div>
 
         <motion.div
+          ref={ref}
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -118,7 +124,9 @@ export default function Services() {
                     <CardTitle className="text-xl text-white">{service.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription className="text-base text-zinc-300">{service.description}</CardDescription>
+                    <CardDescription className="text-base text-zinc-300 min-h-[4rem]">
+                      {isInView && <AnimatedText text={service.description} delay={index * 300} speed={0.03} />}
+                    </CardDescription>
 
                     <motion.div
                       className="mt-4 flex items-center text-sm font-medium text-purple-400"
